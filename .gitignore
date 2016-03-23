@@ -1,5 +1,8 @@
 .DS_Store
 
+# data raw file, since too big
+data/FoodFacts.csv
+
 # ipython notebook save
 .ipynb_checkpoints
 
