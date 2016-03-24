@@ -7,11 +7,11 @@ UK Department of Health Guide
 
 import math
 
-def cal_A_pts(energy=0,sat_fat=0,sugar=0,sodium=0):
+def cal_A_pts(energy,sat_fat,sugar,sodium):
     ```
-    energy in unit kJ
-    sat_fat, sugar in unit g
-    sodium in unit mg
+    energy unit: kJ
+    sat_fat, sugar unit: g
+    sodium unit: mg
     ```
     A_nutrition = [energy,sat_fat,sugar,sodium]
     A_coeff = [335.0,1.0,4.5,90.0] # 发现每一项都是和某个系数有关
@@ -26,7 +26,7 @@ def cal_A_pts(energy=0,sat_fat=0,sugar=0,sodium=0):
         else:
             A_pts[i] = 10
 
-    return sum(A_pts)
+    return A_pts
 
 def cal_C_pts(fvn=0,fibre=0,protein=0):
     ```
@@ -54,4 +54,18 @@ def cal_C_pts(fvn=0,fibre=0,protein=0):
                 C_pts[i+1] = math.floor(C_nutrition[i]/C_coeff[i])
         else:
             A_pts[i] = 5
-    return sum(C_pts)
+    return C_pts
+
+def overall_score(nutrition_all):
+    A_nutrient = energy,sat_fat,sugar,sodium
+    C_nutrient = fvn,fibre,protein
+    A_pts = cal_A_pts(A_nutrient)
+    C_pts = cal_C_pts(C_nutrient)
+
+    if A_pts < 11:
+        total_pts = sum(A_pts) - sum(C_pts)
+    elif A_pts >= 11 and C_pts[0] == 5:
+        total_pts = sum(A_pts) - sum(C_pts)
+    elif A_pts >= 11 and C_pts[0] < 5:
+        total_pts = sum(A_pts) - (C_pts[0]+C_pts[1])
+    return total_pts
